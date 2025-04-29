@@ -210,6 +210,13 @@ class Tag:
                    namespace=namespace, tag=tag, extra_tags=extra_tags,
                    digest=digest)
 
+    @classmethod
+    def parse(cls, tag: Union["Tag", str]) -> "Tag":
+        return tag if isinstance(tag, Tag) else Tag.parse_long_name(tag)
+
+
+TAG = Union[Tag, str]
+
 
 class Tags:
     """Tag List"""
@@ -220,14 +227,14 @@ class Tags:
     def __iter__(self) -> Iterator[Tag]:
         return iter(self.__tags.values())
 
-    def __contains__(self, other: Union[str, Tag]) -> bool:
+    def __contains__(self, other: TAG) -> bool:
         t = other if isinstance(other, Tag) else Tag.parse_long_name(other)
         return t.name in self.__tags or any(t in _t.extra_tags for _t in self)
 
     def __len__(self) -> int:
         return len(self.__tags)
 
-    def append(self, tag: Union[str, Tag]):
+    def append(self, tag: TAG):
         if isinstance(tag, str):
             tag = Tag.parse_long_name(tag)
 
@@ -235,12 +242,12 @@ class Tags:
         if tag_name not in self.__tags:
             self.__tags[tag_name] = tag
 
-    def extend(self, tags: Iterable[Union[str, Tag]]):
+    def extend(self, tags: Iterable[TAG]):
         for tag in tags:
             self.append(tag)
 
     @classmethod
-    def filter(cls, tags: Iterable[Union[str, Tag]]) -> Tuple[Tag, ...]:
+    def filter(cls, tags: Iterable[TAG]) -> Tuple[Tag, ...]:
         names: List[str] = []
         for tag in tags:
             _tag: Tag = tag if isinstance(tag, Tag) else Tag.parse_long_name(tag)  # noqa: E501

@@ -45,14 +45,14 @@ class TestTag(unittest.TestCase):
         self.assertTrue(tag.is_extra_tag(f"demo:{tags.Tag.STABLE_TAG}"))
 
     def test_parse_repository_name(self):
-        self.assertRaises(ValueError, tags.Tag.parse_long_name, "a+b=c")
+        self.assertRaises(ValueError, tags.Tag.parse, "a+b=c")
 
     def test_parse_error_digest(self):
-        self.assertRaises(ValueError, tags.Tag.parse_long_name, f"{self.repository}@sha123:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c")  # noqa:E501
-        self.assertRaises(ValueError, tags.Tag.parse_long_name, f"{self.repository}@sha256:54321")  # noqa:E501
+        self.assertRaises(ValueError, tags.Tag.parse, f"{self.repository}@sha123:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c")  # noqa:E501
+        self.assertRaises(ValueError, tags.Tag.parse, f"{self.repository}@sha256:54321")  # noqa:E501
 
     def test_parse_repository(self):
-        self.assertIsInstance(tag := tags.Tag.parse_long_name(self.repository), tags.Tag)  # noqa:E501
+        self.assertIsInstance(tag := tags.Tag.parse(self.repository), tags.Tag)  # noqa:E501
         self.assertEqual(tag.registry_host, tags.Tag.DEFAULT_REGISTRY_HOST)
         self.assertEqual(tag.namespace, tags.Tag.DEFAULT_NAMESPACE)
         self.assertEqual(tag.repository, self.repository)
@@ -67,7 +67,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(str(tag), f"{tags.Tag.DEFAULT_REGISTRY_HOST}/{tags.Tag.DEFAULT_NAMESPACE}/{self.repository}:{tags.Tag.LATEST_TAG}")  # noqa:E501
 
     def test_parse_repository_tag(self):
-        self.assertIsInstance(tag := tags.Tag.parse_long_name(f"{self.repository}:{self.tag}"), tags.Tag)  # noqa:E501
+        self.assertIsInstance(tag := tags.Tag.parse(f"{self.repository}:{self.tag}"), tags.Tag)  # noqa:E501
         self.assertEqual(tag.registry_host, tags.Tag.DEFAULT_REGISTRY_HOST)
         self.assertEqual(tag.namespace, tags.Tag.DEFAULT_NAMESPACE)
         self.assertEqual(tag.repository, self.repository)
@@ -82,7 +82,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(str(tag), f"{tags.Tag.DEFAULT_REGISTRY_HOST}/{tags.Tag.DEFAULT_NAMESPACE}/{self.repository}:{self.tag}")  # noqa:E501
 
     def test_parse_repository_digest(self):
-        self.assertIsInstance(tag := tags.Tag.parse_long_name(f"{self.repository}@{self.digest}"), tags.Tag)  # noqa:E501
+        self.assertIsInstance(tag := tags.Tag.parse(f"{self.repository}@{self.digest}"), tags.Tag)  # noqa:E501
         self.assertEqual(tag.registry_host, tags.Tag.DEFAULT_REGISTRY_HOST)
         self.assertEqual(tag.namespace, tags.Tag.DEFAULT_NAMESPACE)
         self.assertEqual(tag.repository, self.repository)
@@ -97,7 +97,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(str(tag), f"{tags.Tag.DEFAULT_REGISTRY_HOST}/{tags.Tag.DEFAULT_NAMESPACE}/{self.repository}@{self.digest}")  # noqa:E501
 
     def test_parse_registry_host_repository(self):
-        self.assertIsInstance(tag := tags.Tag.parse_long_name(f"{self.registry_host}/{self.repository}"), tags.Tag)  # noqa:E501
+        self.assertIsInstance(tag := tags.Tag.parse(f"{self.registry_host}/{self.repository}"), tags.Tag)  # noqa:E501
         self.assertEqual(tag.registry_host, self.registry_host)
         self.assertEqual(tag.namespace, tags.Tag.DEFAULT_NAMESPACE)
         self.assertEqual(tag.repository, self.repository)
@@ -112,7 +112,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(str(tag), f"{self.registry_host}/{tags.Tag.DEFAULT_NAMESPACE}/{self.repository}:{tags.Tag.LATEST_TAG}")  # noqa:E501
 
     def test_parse_namespace_repository(self):
-        self.assertIsInstance(tag := tags.Tag.parse_long_name(f"{self.namespace}/{self.repository}"), tags.Tag)  # noqa:E501
+        self.assertIsInstance(tag := tags.Tag.parse(f"{self.namespace}/{self.repository}"), tags.Tag)  # noqa:E501
         self.assertEqual(tag.registry_host, tags.Tag.DEFAULT_REGISTRY_HOST)
         self.assertEqual(tag.namespace, self.namespace)
         self.assertEqual(tag.repository, self.repository)
@@ -127,7 +127,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(str(tag), f"{tags.Tag.DEFAULT_REGISTRY_HOST}/{self.namespace}/{self.repository}:{tags.Tag.LATEST_TAG}")  # noqa:E501
 
     def test_parse_namespace_repository_tag(self):
-        self.assertIsInstance(tag := tags.Tag.parse_long_name(f"{self.namespace}/{self.repository}:{self.tag}"), tags.Tag)  # noqa:E501
+        self.assertIsInstance(tag := tags.Tag.parse(f"{self.namespace}/{self.repository}:{self.tag}"), tags.Tag)  # noqa:E501
         self.assertEqual(tag.registry_host, tags.Tag.DEFAULT_REGISTRY_HOST)
         self.assertEqual(tag.namespace, self.namespace)
         self.assertEqual(tag.repository, self.repository)
@@ -142,7 +142,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(str(tag), f"{tags.Tag.DEFAULT_REGISTRY_HOST}/{self.namespace}/{self.repository}:{self.tag}")  # noqa:E501
 
     def test_parse_registry_host_namespace_repository(self):
-        self.assertIsInstance(tag := tags.Tag.parse_long_name(f"{self.registry_host}/{self.namespace}/{self.repository}"), tags.Tag)  # noqa:E501
+        self.assertIsInstance(tag := tags.Tag.parse(f"{self.registry_host}/{self.namespace}/{self.repository}"), tags.Tag)  # noqa:E501
         self.assertEqual(tag.registry_host, self.registry_host)
         self.assertEqual(tag.namespace, self.namespace)
         self.assertEqual(tag.repository, self.repository)
@@ -157,7 +157,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(str(tag), f"{self.registry_host}/{self.namespace}/{self.repository}:{tags.Tag.LATEST_TAG}")  # noqa:E501
 
     def test_parse_registry_host_namespace_repository_tag(self):
-        self.assertIsInstance(tag := tags.Tag.parse_long_name(f"{self.registry_host}/{self.namespace}/{self.repository}:{self.tag}"), tags.Tag)  # noqa:E501
+        self.assertIsInstance(tag := tags.Tag.parse(f"{self.registry_host}/{self.namespace}/{self.repository}:{self.tag}"), tags.Tag)  # noqa:E501
         self.assertEqual(tag.registry_host, self.registry_host)
         self.assertEqual(tag.namespace, self.namespace)
         self.assertEqual(tag.repository, self.repository)
