@@ -2,6 +2,8 @@
 omit =
     containers_kits/unittest/*
     containers_kits/attribute.py
+    ckits_images/unittest/*
+    ckits_images/attribute.py
 
 [report]
 exclude_lines =

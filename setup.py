@@ -45,7 +45,10 @@ setup(
     project_urls={"Source Code": __urlcode__,
                   "Bug Tracker": __urlbugs__,
                   "Documentation": __urldocs__},
-    packages=find_packages(include=["containers_kits*"], exclude=["containers_kits.unittest"]),  # noqa:E501
+    packages=find_packages(
+        include=["containers_kits*", "ckits_images*"],
+        exclude=["containers_kits.unittest", "ckits_images.unittest"]
+    ),
     install_requires=all_requirements(),
     cmdclass={
         "install": CustomInstallCommand,
